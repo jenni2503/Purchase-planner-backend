@@ -89,7 +89,7 @@ app.get("/item/:id", (req, res) => {
 app.put("/item/:id", (req, res) => {
   const { id } = req.params;
   const item = new Item(req.body);
-  if (isAdmin(req)) {
+  if (!isAdmin(req)) {
     res.status(403).send("Not allowed");
     return;
   }
@@ -110,7 +110,7 @@ app.put("/item/:id", (req, res) => {
 // delete item by id
 app.delete("/item/:id", (req, res) => {
   const { id } = req.params;
-  if (isAdmin(req)) {
+  if (!isAdmin(req)) {
     res.status(403).send("Not allowed");
     return;
   }
