@@ -15,11 +15,13 @@ const mongoDbUrl: string = process.env.MONGO_DB_URL as string;
 console.log(mongoDbUrl);
 
 // middleware
-app.use(
-  cors({
-    origin: "https://purchase-planner-frontend.vercel.app",
-  })
-);
+// app.use(
+//   cors({
+//     origin: "https://purchase-planner-frontend.vercel.app/",
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     credentials: true,
+//   })
+// );
 app.use(morgan("dev"));
 app.use(express.json());
 
