@@ -21,6 +21,7 @@ app.use(
     origin: frontendUrl,
   })
 );
+console.log("CORS allowed for:", frontendUrl);
 app.use(morgan("dev"));
 app.use(express.json());
 
