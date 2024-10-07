@@ -9,7 +9,6 @@ dotenv.config();
 const token = process.env.MYSECRETTOKEN;
 const app = express();
 const port = process.env.PORT;
-const frontendUrl = process.env.FRONTEND_URL;
 
 // connect to mongodb
 const mongoDbUrl: string = process.env.MONGO_DB_URL as string;
@@ -18,7 +17,7 @@ console.log(mongoDbUrl);
 // middleware
 app.use(
   cors({
-    origin: frontendUrl,
+    origin: "https://purchase-planner-frontend.vercel.app/",
   })
 );
 app.use(morgan("dev"));
@@ -42,7 +41,6 @@ app.post("/add-item", (req, res) => {
 
 // get all items
 app.get("/", (req, res) => {
-  console.log("CORS allowed for:", frontendUrl);
   Item.find()
     .then((result) => {
       res.status(200).send(result);
