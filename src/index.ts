@@ -21,7 +21,6 @@ app.use(
     origin: frontendUrl,
   })
 );
-console.log("CORS allowed for:", frontendUrl);
 app.use(morgan("dev"));
 app.use(express.json());
 
@@ -43,6 +42,7 @@ app.post("/add-item", (req, res) => {
 
 // get all items
 app.get("/", (req, res) => {
+  console.log("CORS allowed for:", frontendUrl);
   Item.find()
     .then((result) => {
       res.status(200).send(result);
