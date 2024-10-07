@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "outputDirectory": "dist",
   "buildCommand": "npm run build:vercel",
   "builds": [
     {
