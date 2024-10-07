@@ -17,14 +17,14 @@ console.log(mongoDbUrl);
 // middleware
 app.use(
   cors({
-    origin: "https://purchase-planner-frontend.vercel.app",
+    origin: process.env.CORS_ORIGIN,
   })
 );
 app.use(morgan("dev"));
 app.use(express.json());
 
 // post add a item
-app.post("/add-item", (req, res) => {
+app.post("/item", (req, res) => {
   const item = new Item(req.body);
   item
     .save()
@@ -40,7 +40,7 @@ app.post("/add-item", (req, res) => {
 });
 
 // get all items
-app.get("/", (req, res) => {
+app.get("/item", (req, res) => {
   Item.find()
     .then((result) => {
       res.status(200).send(result);
@@ -54,7 +54,7 @@ app.get("/", (req, res) => {
 });
 
 // get item by id
-app.get("/items/:id", (req, res) => {
+app.get("/item/:id", (req, res) => {
   const { id } = req.params;
   Item.findById(id)
     .then((result) => {
@@ -73,7 +73,7 @@ app.get("/items/:id", (req, res) => {
 });
 
 // delete item by id
-app.delete("/items/:id", (req, res) => {
+app.delete("/item/:id", (req, res) => {
   const { id } = req.params;
   const headers = req.headers;
   if (headers.secrettoken !== token) {
