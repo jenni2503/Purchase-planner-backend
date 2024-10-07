@@ -18,7 +18,7 @@ const mongoDbUrl = process.env.MONGO_DB_URL;
 console.log(mongoDbUrl);
 // middleware
 app.use((0, cors_1.default)({
-    origin: "http://localhost:5173",
+    origin: "https://purchase-planner-frontend.vercel.app",
 }));
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
@@ -28,45 +28,45 @@ app.post("/add-item", (req, res) => {
     item
         .save()
         .then((result) => {
-        res.status(201).json(result);
-        return;
-    })
+            res.status(201).json(result);
+            return;
+        })
         .catch((err) => {
-        console.log(err);
-        res.status(500).send("Error saving the item");
-        return;
-    });
+            console.log(err);
+            res.status(500).send("Error saving the item");
+            return;
+        });
 });
 // get all items
 app.get("/", (req, res) => {
     item_1.default.find()
         .then((result) => {
-        res.status(200).send(result);
-        return;
-    })
+            res.status(200).send(result);
+            return;
+        })
         .catch((err) => {
-        console.log(err);
-        res.status(500).send("Error fetching items");
-        return;
-    });
+            console.log(err);
+            res.status(500).send("Error fetching items");
+            return;
+        });
 });
 // get item by id
 app.get("/items/:id", (req, res) => {
     const { id } = req.params;
     item_1.default.findById(id)
         .then((result) => {
-        if (!result) {
-            res.status(404).send("Item not found");
+            if (!result) {
+                res.status(404).send("Item not found");
+                return;
+            }
+            res.status(200).send(result);
             return;
-        }
-        res.status(200).send(result);
-        return;
-    })
+        })
         .catch((err) => {
-        console.log(err);
-        res.status(500).send("Error fetching item");
-        return;
-    });
+            console.log(err);
+            res.status(500).send("Error fetching item");
+            return;
+        });
 });
 // delete item by id
 app.delete("/items/:id", (req, res) => {
@@ -78,26 +78,26 @@ app.delete("/items/:id", (req, res) => {
     }
     item_1.default.findByIdAndDelete(id)
         .then((result) => {
-        if (!result)
-            res.status(404).send("Item not found");
-        else
-            res.status(204).send();
-    })
+            if (!result)
+                res.status(404).send("Item not found");
+            else
+                res.status(204).send();
+        })
         .catch((err) => {
-        console.log(err);
-        res.status(500).send("Error deleting item");
-        return;
-    });
+            console.log(err);
+            res.status(500).send("Error deleting item");
+            return;
+        });
 });
 // connect to db first then let server listen for req
 mongoose_1.default
     .connect(mongoDbUrl)
     .then((result) => {
-    console.log("connected to db");
-    app.listen(port, () => {
-        console.log(`Server is running on http://localhost:${port}`);
-    });
-})
+        console.log("connected to db");
+        app.listen(port, () => {
+            console.log(`Server is running on http://localhost:${port}`);
+        });
+    })
     .catch((err) => console.log(err));
 // 404 page
 app.use((req, res) => {
