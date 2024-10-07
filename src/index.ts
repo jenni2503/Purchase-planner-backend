@@ -17,7 +17,7 @@ console.log(mongoDbUrl);
 // middleware
 app.use(
   cors({
-    origin: "https://purchase-planner-frontend.vercel.app/",
+    origin: "https://purchase-planner-frontend.vercel.app",
   })
 );
 app.use(morgan("dev"));
