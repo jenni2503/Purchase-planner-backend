@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Item from "./models/item";
 import morgan from "morgan";
-// import cors from "cors";
+import cors from "cors";
 
 dotenv.config();
 const token = process.env.MYSECRETTOKEN;
@@ -15,11 +15,11 @@ const mongoDbUrl: string = process.env.MONGO_DB_URL as string;
 console.log(mongoDbUrl);
 
 // middleware
-// app.use(
-//   cors({
-//     origin: "https://purchase-planner-frontend.vercel.app/",
-//   })
-// );
+app.use(
+  cors({
+    origin: "https://purchase-planner-frontend.vercel.app",
+  })
+);
 app.use(morgan("dev"));
 app.use(express.json());
 
