@@ -9,6 +9,7 @@ dotenv.config();
 const token = process.env.MYSECRETTOKEN;
 const app = express();
 const port = process.env.PORT;
+const frontendUrl = process.env.FRONTEND_URL;
 
 // connect to mongodb
 const mongoDbUrl: string = process.env.MONGO_DB_URL as string;
@@ -17,7 +18,7 @@ console.log(mongoDbUrl);
 // middleware
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: frontendUrl,
   })
 );
 app.use(morgan("dev"));
