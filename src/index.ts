@@ -14,6 +14,11 @@ const port = process.env.PORT;
 const mongoDbUrl: string = process.env.MONGO_DB_URL as string;
 console.log(mongoDbUrl);
 
+function isAdmin(req: express.Request) {
+  const headers = req.headers;
+  return headers.secrettoken === token;
+}
+
 // middleware
 app.use(
   cors({
@@ -43,8 +48,14 @@ app.post("/item", (req, res) => {
 app.get("/item", (req, res) => {
   Item.find()
     .then((result) => {
-      res.status(200).send(result);
-      return;
+      const onlyPublished = result.filter((item) => item.published);
+      if (isAdmin(req)) {
+        res.status(200).send(result);
+        return;
+      } else {
+        res.status(200).send(onlyPublished);
+        return;
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -62,8 +73,11 @@ app.get("/item/:id", (req, res) => {
         res.status(404).send("Item not found");
         return;
       }
-      res.status(200).send(result);
-      return;
+      if (isAdmin(req) || result.published) {
+        res.status(200).send(result);
+        return;
+      }
+      res.status(404).send("Item not found");
     })
     .catch((err) => {
       console.log(err);
@@ -72,11 +86,31 @@ app.get("/item/:id", (req, res) => {
     });
 });
 
+app.put("/item/:id", (req, res) => {
+  const { id } = req.params;
+  const item = new Item(req.body);
+  if (isAdmin(req)) {
+    res.status(403).send("Not allowed");
+    return;
+  }
+  Item.findByIdAndUpdate(id, item, { new: true })
+    .then((result) => {
+      if (!result) {
+        res.status(404).send("Item not found");
+        return;
+      }
+      res.status(200).send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send("Error updating item");
+    });
+});
+
 // delete item by id
 app.delete("/item/:id", (req, res) => {
   const { id } = req.params;
-  const headers = req.headers;
-  if (headers.secrettoken !== token) {
+  if (isAdmin(req)) {
     res.status(403).send("Not allowed");
     return;
   }
